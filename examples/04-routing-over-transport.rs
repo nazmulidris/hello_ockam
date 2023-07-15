@@ -21,17 +21,18 @@ use ockam::{
     node, route, AsyncTryClone, Context, Result, TcpConnectionOptions, TcpListenerOptions,
     TcpTransportExtension,
 };
+use tokio::spawn;
 
 /// From: <https://docs.ockam.io/reference/libraries/rust/routing#transport>
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
     let ctx_clone = ctx.async_try_clone().await?;
 
-    let mut node_responder = tokio::spawn(async move { create_responder_node(ctx).await.unwrap() })
+    let mut node_responder = spawn(async move { create_responder_node(ctx).await.unwrap() })
         .await
         .unwrap();
 
-    tokio::spawn(async move {
+    spawn(async move {
         create_initiator_node(ctx_clone).await.unwrap();
     })
     .await
@@ -49,7 +50,7 @@ async fn main(ctx: Context) -> Result<()> {
 // It then runs forever waiting for messages.
 async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     print_title(
-        "Create a node that runs tcp listener and echoer worker → wait for messages until stopped",
+        "Create a node that runs tcp listener on 4000 and echoer worker → wait for messages until stopped",
     );
 
     // Create a node with default implementations

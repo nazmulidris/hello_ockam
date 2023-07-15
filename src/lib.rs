@@ -15,12 +15,20 @@
  *   limitations under the License.
  */
 
+// https://github.com/rust-lang/rust-clippy
+// https://rust-lang.github.io/rust-clippy/master/index.html
+#![warn(clippy::all)]
+#![warn(clippy::unwrap_in_result)]
+#![warn(rust_2018_idioms)]
+
 // Import files.
 mod echoer;
+mod forwarder;
 mod hop;
 mod utils;
 
 // Re-export symbols.
 pub use echoer::*;
+pub use forwarder::*;
 pub use hop::*;
 pub use utils::*;
