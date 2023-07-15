@@ -17,3 +17,7 @@ cargo run --example 02-worker
 ```sh
 cargo run --example 03-routing
 ```
+
+```sh
+cargo run --example 03-routing-many-hops
+```
