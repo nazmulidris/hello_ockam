@@ -18,12 +18,15 @@
 // examples/03-routing.rs
 // This node routes a message.
 
-use hello_ockam::{Echoer, Hopper};
+use colored::Colorize;
+use hello_ockam::{print_title, Echoer, Hopper};
 use ockam::{node, route, Context, Result};
 
 /// From: <https://docs.ockam.io/reference/libraries/rust/routing#app-worker>
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
+    print_title("Run a node w/ 'app', 'echoer' and 'h1' workers → send a message over a hop -> stop the node");
+
     // Create a node with default implementations
     let mut node = node(ctx);
 
@@ -35,8 +38,15 @@ async fn main(ctx: Context) -> Result<()> {
 
     // Send a message to the worker at address "echoer",
     // via the worker at address "h1"
-    node.send(route!["h1", "echoer"], "Hello Ockam!".to_string())
-        .await?;
+    let route = route!["h1", "echoer"];
+    let route_msg = format!("{:?}", route);
+    let msg = "Hello Ockam!".to_string();
+    println!(
+        "App Sending: '{0}', over route: '{1}'",
+        msg.red(),
+        route_msg.green()
+    );
+    node.send(route, msg).await?;
 
     // Wait to receive a reply and print it.
     let reply = node.receive::<String>().await?;

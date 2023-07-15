@@ -18,10 +18,13 @@
 // examples/01-node.rs
 // This program creates and then immediately stops a node.
 
+use hello_ockam::print_title;
 use ockam::{node, Context, Result};
 
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
+    print_title("Run a node & stop it right away");
+
     // Create a node with default implementations
     let mut node = node(ctx);
 

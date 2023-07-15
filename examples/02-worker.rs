@@ -18,12 +18,15 @@
 // examples/02-worker.rs
 // This node creates a worker, sends it a message, and receives a reply.
 
-use hello_ockam::Echoer;
+use colored::Colorize;
+use hello_ockam::{print_title, Echoer};
 use ockam::{node, Context, Result};
 
 /// "app" worker - `main()` is a worker w/ the address of "app" on this node.
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
+    print_title("Run a node 'app' & 'echoer' worker → send a message → stop the node");
+
     // Create a node with default implementations
     let mut node = node(ctx);
 
@@ -35,9 +38,8 @@ async fn main(ctx: Context) -> Result<()> {
 
     // Wait to receive a reply and print it.
     let reply = node.receive::<String>().await?;
-    println!("App Received: {}", reply); // should print "echo back: Hello Ockam!"
+    println!("App Received: {}", reply.green()); // should print "echo back: Hello Ockam!"
 
     // Stop all workers, stop the node, cleanup and return.
     node.stop().await
 }
-

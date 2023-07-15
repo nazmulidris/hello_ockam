@@ -17,6 +17,7 @@
 
 // src/echoer.rs
 
+use colored::Colorize;
 use ockam::{Context, Result, Routed, Worker};
 
 pub struct Echoer;
@@ -37,7 +38,11 @@ impl Worker for Echoer {
     type Message = String;
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<String>) -> Result<()> {
-        println!("📣 Address: {}, Received: {}", ctx.address(), msg);
+        println!(
+            "📣 Address: {}, Received: {}",
+            format!("{}", ctx.address()).blue(),
+            msg.yellow()
+        );
 
         // Echo the message body back on its return_route.
         let new_msg = format!("👈 echo back: {}", msg.as_body());

@@ -15,12 +15,11 @@
  *   limitations under the License.
  */
 
-// Import files.
-mod echoer;
-mod hop;
-mod utils;
+use colored::Colorize;
 
-// Re-export symbols.
-pub use echoer::*;
-pub use hop::*;
-pub use utils::*;
+pub fn print_title(title: &str) {
+    let padding = "=".repeat(title.len());
+    println!("{}", padding.red().on_yellow());
+    println!("{}", title.on_purple());
+    println!("{}", padding.red().on_yellow());
+}
