@@ -37,10 +37,11 @@ impl Worker for Echoer {
     type Message = String;
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<String>) -> Result<()> {
-        println!("Address: {}, Received: {}", ctx.address(), msg);
+        println!("📣 Address: {}, Received: {}", ctx.address(), msg);
 
         // Echo the message body back on its return_route.
         let new_msg = format!("👈 echo back: {}", msg.as_body());
+        println!("\tsending msg back: {}", new_msg);
         ctx.send(msg.return_route(), new_msg).await
     }
 }

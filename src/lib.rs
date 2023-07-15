@@ -17,6 +17,8 @@
 
 // Import files.
 mod echoer;
+mod hop;
 
 // Re-export symbols.
 pub use echoer::*;
+pub use hop::*;

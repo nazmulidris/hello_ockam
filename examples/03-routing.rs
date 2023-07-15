@@ -15,13 +15,13 @@
  *   limitations under the License.
  */
 
-// examples/02-worker.rs
-// This node creates a worker, sends it a message, and receives a reply.
+// examples/03-routing.rs
+// This node routes a message.
 
-use hello_ockam::Echoer;
-use ockam::{node, Context, Result};
+use hello_ockam::{Echoer, Hopper};
+use ockam::{node, route, Context, Result};
 
-/// "app" worker - `main()` is a worker w/ the address of "app" on this node.
+/// From: <https://docs.ockam.io/reference/libraries/rust/routing#app-worker>
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
     // Create a node with default implementations
@@ -30,8 +30,13 @@ async fn main(ctx: Context) -> Result<()> {
     // Start a worker, of type Echoer, at address "echoer"
     node.start_worker("echoer", Echoer).await?;
 
-    // Send a message to the worker at address "echoer".
-    node.send("echoer", "Hello Ockam!".to_string()).await?;
+    // Start a worker, of type Hopper, at address "h1"
+    node.start_worker("h1", Hopper).await?;
+
+    // Send a message to the worker at address "echoer",
+    // via the worker at address "h1"
+    node.send(route!["h1", "echoer"], "Hello Ockam!".to_string())
+        .await?;
 
     // Wait to receive a reply and print it.
     let reply = node.receive::<String>().await?;
@@ -40,4 +45,3 @@ async fn main(ctx: Context) -> Result<()> {
     // Stop all workers, stop the node, cleanup and return.
     node.stop().await
 }
-
