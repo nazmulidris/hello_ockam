@@ -21,3 +21,7 @@ cargo run --example 03-routing
 ```sh
 cargo run --example 03-routing-many-hops
 ```
+
+```sh
+cargo run --example 04-routing-over-transport
+```
