@@ -57,13 +57,13 @@ async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     let node = node(ctx);
 
     // Initialize the TCP Transport
-    let tcp = node.create_tcp_transport().await?;
+    let tcp_transport = node.create_tcp_transport().await?;
 
     // Create an echoer worker
     node.start_worker("echoer", Echoer).await?;
 
     // Create a TCP listener and wait for incoming connections.
-    let listener = tcp
+    let listener = tcp_transport
         .listen("127.0.0.1:4000", TcpListenerOptions::new())
         .await?;
 
@@ -85,10 +85,10 @@ async fn create_initiator_node(ctx: Context) -> Result<()> {
     let mut node = node(ctx);
 
     // Initialize the TCP Transport.
-    let tcp = node.create_tcp_transport().await?;
+    let tcp_transport = node.create_tcp_transport().await?;
 
     // Create a TCP connection to a different node.
-    let connection_to_responder = tcp
+    let connection_to_responder = tcp_transport
         .connect("localhost:4000", TcpConnectionOptions::new())
         .await?;
 

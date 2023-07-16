@@ -67,7 +67,7 @@ async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     let node = node(ctx);
 
     // Initialize the TCP Transport.
-    let tcp = node.create_tcp_transport().await?;
+    let tcp_transport = node.create_tcp_transport().await?;
 
     node.start_worker("echoer", Echoer).await?;
 
@@ -75,7 +75,7 @@ async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     let id_bob = node.create_identity().await?;
 
     // Create a TCP listener and wait for incoming connections.
-    let listener = tcp
+    let listener = tcp_transport
         .listen("127.0.0.1:4000", TcpListenerOptions::new())
         .await?;
 
@@ -151,8 +151,8 @@ async fn create_initiator_node(ctx: Context) -> Result<()> {
     let id_alice = node.create_identity().await?;
 
     // Create a TCP connection to the middle node.
-    let tcp = node.create_tcp_transport().await?;
-    let connection_to_middle_node = tcp
+    let tcp_transport = node.create_tcp_transport().await?;
+    let connection_to_middle_node = tcp_transport
         .connect("localhost:3000", TcpConnectionOptions::new())
         .await?;
 
