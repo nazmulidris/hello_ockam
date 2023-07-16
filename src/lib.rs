@@ -24,11 +24,9 @@
 // Import files.
 mod echoer;
 mod forwarder;
-mod hop;
-mod utils;
+mod hopper;
 
 // Re-export symbols.
 pub use echoer::*;
 pub use forwarder::*;
-pub use hop::*;
-pub use utils::*;
+pub use hopper::*;

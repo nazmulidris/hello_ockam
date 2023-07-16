@@ -15,9 +15,11 @@
  *   limitations under the License.
  */
 
+use colored::Colorize;
 use ockam::node;
 use ockam::{Context, Result};
 
+/// From: <https://docs.ockam.io/reference/libraries/rust/vaults-and-identities>
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
     // Create default node to safely store secret keys for Alice
@@ -26,7 +28,8 @@ async fn main(ctx: Context) -> Result<()> {
     // Create an Identity to represent Alice.
     let alice = node.create_identity().await?;
 
-    println!("Identity identifier for Alice: {:?}", alice);
+    let output_msg = format!("Identity identifier for Alice: \n{:?}", alice);
+    println!("{}", output_msg.on_bright_black());
 
     // Stop the node.
     node.stop().await

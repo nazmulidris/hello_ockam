@@ -15,13 +15,13 @@
  *   limitations under the License.
  */
 
-// src/hop.rs
-
+use colored::Colorize;
 use ockam::{Any, Context, Result, Routed, Worker};
 
 pub struct Hopper;
 
 /// From: <https://docs.ockam.io/reference/libraries/rust/routing#hop-worker>
+/// src/hop.rs
 #[ockam::worker]
 impl Worker for Hopper {
     type Context = Context;
@@ -32,7 +32,8 @@ impl Worker for Hopper {
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<Any>) -> Result<()> {
         // Cast the msg to a Routed<String>
         let msg: Routed<String> = msg.cast()?;
-        println!("🐇 Address: {}, Received: {}", ctx.address(), msg);
+        let output_msg = format!("🐇 Address: {}, Received: {}", ctx.address(), msg);
+        println!("{}", output_msg.on_bright_blue());
 
         // Some type conversion
         let mut message = msg.into_local_message();
@@ -41,11 +42,12 @@ impl Worker for Hopper {
         // Remove my address from the onward_route
         let removed_address = transport_message.onward_route.step()?;
 
-        println!(
-            "\tonward_route -> remove address: {}, return_route -> prepend address: {}",
+        let output_msg = format!(
+            "\tonward_route -> remove address: {}, \n\treturn_route -> prepend address: {}",
             removed_address,
             ctx.address()
         );
+        println!("{}", output_msg.on_bright_blue());
 
         // Insert my address at the beginning return_route
         transport_message

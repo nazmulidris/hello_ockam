@@ -22,7 +22,8 @@ use ockam::{Context, Result, Routed, Worker};
 
 pub struct Echoer;
 
-/// From <https://docs.ockam.io/reference/libraries/rust/nodes#workers>:
+/// From: <https://docs.ockam.io/reference/libraries/rust/nodes#workers>
+/// src/echoer.rs
 ///
 /// When a worker is started on a node, it is given one or more addresses. The node
 /// maintains a mailbox for each address and whenever a message arrives for a specific
@@ -38,11 +39,12 @@ impl Worker for Echoer {
     type Message = String;
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<String>) -> Result<()> {
-        println!(
-            "📣 Address: {}, Received: {}",
-            format!("{}", ctx.address()).blue(),
-            msg.yellow()
+        let output_msg = format!(
+            "🪞 Address: {}, Received: {}",
+            format!("{}", ctx.address()).white(),
+            format!("{}", msg).white()
         );
+        println!("{}", output_msg.on_bright_magenta());
 
         // Echo the message body back on its return_route.
         let new_msg = format!("👈 echo back: {}", msg.as_body());

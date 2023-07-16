@@ -16,7 +16,7 @@
  */
 
 use colored::Colorize;
-use hello_ockam::{print_title, Echoer};
+use hello_ockam::Echoer;
 use ockam::{
     node, route, AsyncTryClone, Context, Result, TcpConnectionOptions, TcpListenerOptions,
     TcpTransportExtension,
@@ -45,9 +45,9 @@ async fn main(ctx: Context) -> Result<()> {
     Ok(())
 }
 
-// examples/04-routing-over-transport-responder.rs
-// This node starts a tcp listener and an echoer worker.
-// It then runs forever waiting for messages.
+/// examples/04-routing-over-transport-responder.rs
+/// This node starts a tcp listener and an echoer worker.
+/// It then runs forever waiting for messages.
 async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     print_title(
         "Create a node that runs tcp listener on 4000 and echoer worker → wait for messages until stopped",
@@ -74,8 +74,8 @@ async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     Ok(node)
 }
 
-// examples/04-routing-over-transport-initiator.rs
-// This node routes a message, to a worker on a different node, over the tcp transport.
+/// examples/04-routing-over-transport-initiator.rs
+/// This node routes a message, to a worker on a different node, over the tcp transport.
 async fn create_initiator_node(ctx: Context) -> Result<()> {
     print_title(
         "Create a node that routes a message, over the TCP transport, to a worker on a different node → stop",
@@ -94,14 +94,29 @@ async fn create_initiator_node(ctx: Context) -> Result<()> {
 
     // Send a message to the "echoer" worker on a different node, over a tcp transport.
     // Wait to receive a reply and print it.
-    let msg = "Hello Ockam!".to_string();
+    let msg = "Hello Ockam!";
     let route = route![connection_to_responder, "echoer"];
-    let reply = node.send_and_receive::<String>(route, msg).await?;
-
-    println!("App Received: '{}'", reply.blue()); // should print "Hello Ockam!"
+    let route_msg = format!("{:?}", route);
+    let reply = node
+        .send_and_receive::<String>(route, msg.to_string())
+        .await?;
+    let output_msg = format!(
+        "App Sending: '{0}', over route: '{1}', and received: '{2}'",
+        msg.red(),
+        route_msg.green(),
+        reply.yellow() // Should print "👈 echo back:  Hello Ockam!"
+    );
+    println!("{}", output_msg.on_bright_black());
 
     // Stop all workers, stop the node, cleanup and return.
     node.stop().await?;
 
     Ok(())
+}
+
+fn print_title(title: &str) {
+    let padding = "=".repeat(title.len());
+    println!("{}", padding.red().on_yellow());
+    println!("{}", title.on_purple());
+    println!("{}", padding.red().on_yellow());
 }

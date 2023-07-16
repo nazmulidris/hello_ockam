@@ -36,3 +36,7 @@ cargo run --example 04-routing-over-two-transport-hops
 ```sh
 cargo run --example 05-identity
 ```
+
+```sh
+cargo run --example 06-secure-channel-over-two-transport-hops-responder
+```

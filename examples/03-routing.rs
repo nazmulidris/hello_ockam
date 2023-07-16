@@ -15,14 +15,13 @@
  *   limitations under the License.
  */
 
-// examples/03-routing.rs
-// This node routes a message.
-
 use colored::Colorize;
-use hello_ockam::{print_title, Echoer, Hopper};
+use hello_ockam::{Echoer, Hopper};
 use ockam::{node, route, Context, Result};
 
 /// From: <https://docs.ockam.io/reference/libraries/rust/routing#app-worker>
+/// examples/03-routing.rs
+/// This node routes a message.
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
     print_title("Run a node w/ 'app', 'echoer' and 'h1' workers → send a message over a hop -> stop the node");
@@ -41,17 +40,26 @@ async fn main(ctx: Context) -> Result<()> {
     let route = route!["h1", "echoer"];
     let route_msg = format!("{:?}", route);
     let msg = "Hello Ockam!".to_string();
-    println!(
-        "App Sending: '{0}', over route: '{1}'",
-        msg.red(),
-        route_msg.green()
+    let output_msg = format!(
+        "App Sending: '{0}', \nover route: '{1}'",
+        msg.blue(),
+        route_msg.red()
     );
+    println!("{}", output_msg.on_bright_black());
     node.send(route, msg).await?;
 
     // Wait to receive a reply and print it.
     let reply = node.receive::<String>().await?;
-    println!("App Received: {}", reply); // should print "echo back: Hello Ockam!"
+    let output_msg = format!("App Received: '{}'", reply);
+    println!("{}", output_msg.on_bright_black()); // Should print "👈 echo back:  Hello Ockam!"
 
     // Stop all workers, stop the node, cleanup and return.
     node.stop().await
+}
+
+fn print_title(title: &str) {
+    let padding = "=".repeat(title.len());
+    println!("{}", padding.red().on_yellow());
+    println!("{}", title.on_purple());
+    println!("{}", padding.red().on_yellow());
 }

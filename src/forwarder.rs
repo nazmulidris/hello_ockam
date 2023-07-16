@@ -1,4 +1,4 @@
-/*
+/*i
  *   Copyright (c) 2023 Nazmul Idris
  *   All rights reserved.
  *
@@ -15,8 +15,6 @@
  *   limitations under the License.
  */
 
-// src/forwarder.rs
-
 use colored::Colorize;
 use ockam::{Address, Any, Context, LocalMessage, Result, Routed, Worker};
 
@@ -24,7 +22,8 @@ pub struct Forwarder {
     pub address: Address,
 }
 
-/// More info: <https://docs.ockam.io/reference/libraries/rust/routing#routing-over-two-transport-hops>r
+/// From: <https://docs.ockam.io/reference/libraries/rust/routing#routing-over-two-transport-hops>r
+/// src/forwarder.rs
 #[ockam::worker]
 impl Worker for Forwarder {
     type Context = Context;
@@ -33,11 +32,12 @@ impl Worker for Forwarder {
     /// This handle function takes any incoming message and forwards
     /// it to the next hop in it's onward route
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<Any>) -> Result<()> {
-        println!(
-            "📬 Address: {}, Received: {}",
-            format!("{}", ctx.address()).green(),
-            format!("{}", msg).yellow()
+        let output_msg = format!(
+            "👉 Address: {}, Received: {}",
+            format!("{}", ctx.address()).white(),
+            format!("{}", msg).white()
         );
+        println!("{}", output_msg.on_bright_blue());
 
         // Some type conversion
         let mut transport_message = msg.into_local_message().into_transport_message();

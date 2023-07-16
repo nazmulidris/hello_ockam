@@ -15,12 +15,12 @@
  *   limitations under the License.
  */
 
-// examples/01-node.rs
-// This program creates and then immediately stops a node.
-
-use hello_ockam::print_title;
+use colored::Colorize;
 use ockam::{node, Context, Result};
 
+/// From: <https://docs.ockam.io/reference/libraries/rust/nodes>
+/// examples/01-node.rs
+/// This program creates and then immediately stops a node.
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
     print_title("Run a node & stop it right away");
@@ -30,4 +30,11 @@ async fn main(ctx: Context) -> Result<()> {
 
     // Stop the node as soon as it starts.
     node.stop().await
+}
+
+fn print_title(title: &str) {
+    let padding = "=".repeat(title.len());
+    println!("{}", padding.red().on_yellow());
+    println!("{}", title.on_purple());
+    println!("{}", padding.red().on_yellow());
 }
