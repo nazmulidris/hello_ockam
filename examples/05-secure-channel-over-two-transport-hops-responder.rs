@@ -193,3 +193,4 @@ fn print_title(title: &str) {
     println!("{}", title.on_purple());
     println!("{}", padding.red().on_yellow());
 }
+
