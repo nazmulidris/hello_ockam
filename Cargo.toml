@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 colored = "2.0.4"
+hex = "0.4.3"
 ockam = "0.90.0"
 tokio = "1.29.1"

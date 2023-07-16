@@ -15,11 +15,11 @@ Table of contents
 
 1. All the code examples have colorized output so that it is clear to see which node is outputting
    what to `stdout`.
-   - Here's an example of secure channels example: ![06-secure-channel-ex](image.png)
+   - Here's an example of secure channels example: ![05-secure-channel-ex](image.png)
    - Here's another example of routing over multiple hops:
      ![03-routing-over-multiple-hops-ex](image-1.png)
 2. Instead of having multiple source files for certain examples (eg:
-   [secure channels](https://github.com/nazmulidris/hello_ockam/blob/main/examples/06-secure-channel-over-two-transport-hops-responder.rs)),
+   [secure channels](https://github.com/nazmulidris/hello_ockam/blob/main/examples/05-secure-channel-over-two-transport-hops-responder.rs)),
    all the examples are self contained in a single source file using `tokio::spawn` to run multiple
    nodes concurrently, and shut down the entire example cleanly.
 3. All short variable names are replaced w/ longer more readable ones.
@@ -64,5 +64,5 @@ cargo run --example 05-identity
 ```
 
 ```sh
-cargo run --example 06-secure-channel-over-two-transport-hops-responder
+cargo run --example 05-secure-channel-over-two-transport-hops-responder
 ```
