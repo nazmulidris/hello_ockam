@@ -13,7 +13,7 @@ Table of contents
 
 ## Differences between this repo & [docs.ockam.io/Reference/Programming Libraries/Rust](https://docs.ockam.io/reference/libraries/rust)
 
-This repo is just an experiement to see if I can improve on the examples using colored
+This repo is just an experiment to see if I can improve on the examples using colored
 output, more helpful stdout messages, and more concise code.
 
 1. All the code examples have colorized output so that it is clear to see which node is outputting
@@ -50,39 +50,46 @@ output, more helpful stdout messages, and more concise code.
 ## Run the examples
 
 ```sh
-cargo run --example 01-node
+OCKAM_LOG=none cargo run --example 01-node
 ```
 
 ```sh
-cargo run --example 02-worker
+OCKAM_LOG=none cargo run --example 02-worker
 ```
 
 ```sh
-cargo run --example 03-routing
+OCKAM_LOG=none cargo run --example 03-routing
 ```
 
 ```sh
-cargo run --example 03-routing-many-hops
+OCKAM_LOG=none cargo run --example 03-routing-many-hops
 ```
 
 ```sh
-cargo run --example 04-routing-over-transport
+OCKAM_LOG=none cargo run --example 04-routing-over-transport
 ```
 
 ```sh
-cargo run --example 04-routing-over-two-transport-hops
+OCKAM_LOG=none cargo run --example 04-routing-over-two-transport-hops
 ```
 
 ```sh
-cargo run --example 05-identity
+OCKAM_LOG=none cargo run --example 05-identity
 ```
 
 ```sh
-cargo run --example 05-secure-channel-over-two-transport-hops-responder
+OCKAM_LOG=none cargo run --example 05-secure-channel-over-two-transport-hops-responder
 ```
 
 ```sh
-gnome-terminal -x sh -c "cargo run --example 06-credential-exchange-issuer"
-gnome-terminal -x sh -c "cargo run --example 06-credential-exchange-server"
-cargo run --example 06-credential-exchange-client
+gnome-terminal -x sh -c "OCKAM_LOG=none cargo run --example 06-credential-exchange-issuer"
+gnome-terminal -x sh -c "OCKAM_LOG=none cargo run --example 06-credential-exchange-server"
+OCKAM_LOG=none cargo run --example 06-credential-exchange-client
 ```
+
+# Diagrams in <http://asciiflow.com>
+
+1. [01-node.rs](https://asciiflow.com/#/share/eJyrVspLzE1VssorzcnRUcpJrEwtUrJSqo5RqohRsrK0NNSJUaoEsozMLYGsktSKEiAnRunRlD1UQTExeUBSQcEvPyVVwVABBcClqWoTNoAkTZ7h6EYoOKakFKUWF1shLMBQop5YUKCO4gZMhzSQiFCNwOtV6gSqUq1SLQAC/z9O)
+2. [02-worker.rs](https://asciiflow.com/#/share/eJyrVspLzE1VssorzcnRUcpJrEwtUrJSqo5RqohRsrK0NNSJUaoEsozMLYGsktSKEiAnRunRlJ5HUxooRhNiYvIeTWlSUPDLT0lVMFRAAUAJsPQcati0BGYTNgCzqQnEJMNjE9CMaFJwTEkpSi0utkJYgKFEPbGgQB3FDWhKpoDNXkOUE6ZtAjNmoBgBNRTNDmzenbaHOI9uocC7qckZ+alF6gS8SxJC9y7umCXDcCzWxSjVKtUCAO/Vn64=)
+3. [03-routing.rs](https://asciiflow.com/#/share/eJyrVspLzE1VslIyMFbSUcpJrEwtAnKqY5QqYpSsLC0NdWKUKoEsIwsDIKsktaIEyIlRejRlD1VQTEwekFRQ8MtPSVUwVEABj6Y0QaSpahM2gCT9aErPoykNJKIJaEY0KTimpBSlFhdbIbyCoUQ9saBAHcW3aEqmgM3eQ5QTpu0CM2agGAHmoPkTu3enEWfLlC0UeDcjv6AgtchQnSre3UQX7+6hwLupyRn5qUXqOJVMIT2ZoXsXb0LGK02dHKVUq1QLACw0OTI=)
+4. [03-routing-many-hops.rs](https://asciiflow.com/#/share/eJyrVspLzE1VslIyMNY1UtJRykmsTC0CcqtjlCpilKwsLQ11YpQqgSwjCwMgqyS1ogTIiVF6NGUPtVBMTB6QVFDwy09JVTBUQAVweWrbhhUgyT+a0vNoSgOJaAK6GU0KjikpRanFxVZwG5ow1agnFhSoI7sCQ80UsPF7iHLFtF1gxgxUM8AcNL/i8PM04uyZsoUiP2fkFxSkFhnq6RmrQ9RUGFPg50108vMeivycmpyRn1qkjlvNFNLTHIaf8adr/PJUy2VKtUq1AL84Qzs=)

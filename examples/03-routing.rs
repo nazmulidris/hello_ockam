@@ -24,7 +24,9 @@ use ockam::{node, route, Context, Result};
 /// This node routes a message.
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
-    print_title("Run a node w/ 'app', 'echoer' and 'h1' workers → send a message over a hop -> stop the node");
+    print_title("Run a node w/ 'app', 'echoer' and 'hopper1' workers → send a message over a hop -> stop the node");
+
+    println!("{}", HELP_TEXT.white().on_bright_black());
 
     // Create a node with default implementations
     let mut node = node(ctx);
@@ -32,12 +34,12 @@ async fn main(ctx: Context) -> Result<()> {
     // Start a worker, of type Echoer, at address "echoer"
     node.start_worker("echoer", Echoer).await?;
 
-    // Start a worker, of type Hopper, at address "h1"
-    node.start_worker("h1", Hopper).await?;
+    // Start a worker, of type Hopper, at address "hopper1"
+    node.start_worker("hopper1", Hopper).await?;
 
     // Send a message to the worker at address "echoer",
-    // via the worker at address "h1"
-    let route = route!["h1", "echoer"];
+    // via the worker at address "hopper1"
+    let route = route!["hopper1", "echoer"];
     let route_msg = format!("{:?}", route);
     let msg = "Hello Ockam!".to_string();
     let output_msg = format!(
@@ -59,7 +61,27 @@ async fn main(ctx: Context) -> Result<()> {
 
 fn print_title(title: &str) {
     let padding = "=".repeat(title.len());
-    println!("{}", padding.red().on_yellow());
-    println!("{}", title.on_purple());
-    println!("{}", padding.red().on_yellow());
+    println!("{}", padding.black().on_bright_white());
+    println!("{}", title.black().on_bright_white());
+    println!("{}", padding.black().on_bright_white());
 }
+
+#[rustfmt::skip]
+const HELP_TEXT: &str =r#"
+┌──────────────────────┐
+│  Node 1              │
+├──────────────────────┤
+│  ┌────────────────┐  │
+│  │ Address:       │  │
+│  │ 'app'          │  │
+│  └─┬────────────▲─┘  │
+│  ┌─▼────────────┴─┐  │
+│  │ Address:       │  │
+│  │ 'hopper1'      │  │
+│  └─┬────────────▲─┘  │
+│  ┌─▼────────────┴─┐  │
+│  │ Address:       │  │
+│  │ 'echoer'       │  │
+│  └────────────────┘  │
+└──────────────────────┘
+"#;

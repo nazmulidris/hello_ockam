@@ -25,6 +25,8 @@ use ockam::{node, Context, Result};
 async fn main(ctx: Context) -> Result<()> {
     print_title("Run a node & stop it right away");
 
+    println!("{}", HELP_TEXT.white().on_bright_black());
+
     // Create a node with default implementations
     let mut node = node(ctx);
 
@@ -34,7 +36,19 @@ async fn main(ctx: Context) -> Result<()> {
 
 fn print_title(title: &str) {
     let padding = "=".repeat(title.len());
-    println!("{}", padding.red().on_yellow());
-    println!("{}", title.on_purple());
-    println!("{}", padding.red().on_yellow());
+    println!("{}", padding.black().on_bright_white());
+    println!("{}", title.black().on_bright_white());
+    println!("{}", padding.black().on_bright_white());
 }
+
+#[rustfmt::skip]
+const HELP_TEXT: &str =r#"
+┌──────────────────────┐
+│  Node 1              │
+├──────────────────────┤
+│  ┌────────────────┐  │
+│  │ Address:       │  │
+│  │ 'app'          │  │
+│  └────────────────┘  │
+└──────────────────────┘
+"#;

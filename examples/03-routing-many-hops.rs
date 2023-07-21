@@ -24,7 +24,9 @@ use ockam::{node, route, Context, Result};
 /// This node routes a message through many hops.
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
-    print_title("Run a node w/ 'app', 'echoer' and 'h1', 'h2', 'h3' workers → send a message over 3 hops -> stop the node");
+    print_title("Run a node w/ 'app', 'echoer' and 'hopper1', 'hopper2', 'hopper3' workers → send a message over 3 hops -> stop the node");
+
+    println!("{}", HELP_TEXT.white().on_bright_black());
 
     // Create a node with default implementations
     let mut node = node(ctx);
@@ -32,13 +34,13 @@ async fn main(ctx: Context) -> Result<()> {
     // Start an Echoer worker at address "echoer"
     node.start_worker("echoer", Echoer).await?;
 
-    // Start 3 hop workers at addresses "h1", "h2" and "h3".
-    node.start_worker("h1", Hopper).await?;
-    node.start_worker("h2", Hopper).await?;
-    node.start_worker("h3", Hopper).await?;
+    // Start 3 hop workers at addresses "hopper1", "hopper2" and "hopper3".
+    node.start_worker("hopper1", Hopper).await?;
+    node.start_worker("hopper2", Hopper).await?;
+    node.start_worker("hopper3", Hopper).await?;
 
-    // Send a message to the echoer worker via the "h1", "h2", and "h3" workers
-    let route = route!["h1", "h2", "h3", "echoer"];
+    // Send a message to the echoer worker via the "hopper1", "hopper2", and "hopper3" workers
+    let route = route!["hopper1", "hopper2", "hopper3", "echoer"];
     let route_msg = format!("{:?}", route);
     let msg = "Hello Ockam!".to_string();
     let output_msg = format!(
@@ -60,7 +62,27 @@ async fn main(ctx: Context) -> Result<()> {
 
 fn print_title(title: &str) {
     let padding = "=".repeat(title.len());
-    println!("{}", padding.red().on_yellow());
-    println!("{}", title.on_purple());
-    println!("{}", padding.red().on_yellow());
+    println!("{}", padding.black().on_bright_white());
+    println!("{}", title.black().on_bright_white());
+    println!("{}", padding.black().on_bright_white());
 }
+
+#[rustfmt::skip]
+const HELP_TEXT: &str =r#"
+┌───────────────────────┐
+│  Node 1               │
+├───────────────────────┤
+│  ┌────────────────┐   │
+│  │ Address:       │   │
+│  │ 'app'          │   │
+│  └─┬────────────▲─┘   │
+│  ┌─▼────────────┴─┐   │
+│  │ Address:       │   │
+│  │ 'hopper1..3'   │x3 │
+│  └─┬────────────▲─┘   │
+│  ┌─▼────────────┴─┐   │
+│  │ Address:       │   │
+│  │ 'echoer'       │   │
+│  └────────────────┘   │
+└───────────────────────┘
+"#;

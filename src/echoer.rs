@@ -40,7 +40,7 @@ impl Worker for Echoer {
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<String>) -> Result<()> {
         let output_msg = format!(
-            "🪞 Address: {}, Received: {}",
+            "📣 'echoer' worker → Address: {}, Received: {}",
             format!("{}", ctx.address()).white(),
             format!("{}", msg).white()
         );

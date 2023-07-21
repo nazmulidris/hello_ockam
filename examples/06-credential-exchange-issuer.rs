@@ -108,7 +108,7 @@ async fn main(ctx: Context) -> Result<()> {
 
 fn print_title(title: &str) {
     let padding = "=".repeat(title.len());
-    println!("{}", padding.red().on_yellow());
-    println!("{}", title.on_purple());
-    println!("{}", padding.red().on_yellow());
+    println!("{}", padding.black().on_bright_white());
+    println!("{}", title.black().on_bright_white());
+    println!("{}", padding.black().on_bright_white());
 }

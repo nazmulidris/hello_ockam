@@ -21,22 +21,15 @@ use ockam::{
     node, route, AsyncTryClone, Context, Result, TcpConnectionOptions, TcpListenerOptions,
     TcpTransportExtension,
 };
-use tokio::spawn;
 
 /// From: <https://docs.ockam.io/reference/libraries/rust/routing#transport>
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
     let ctx_clone = ctx.async_try_clone().await?;
 
-    let mut node_responder = spawn(async move { create_responder_node(ctx).await.unwrap() })
-        .await
-        .unwrap();
+    let mut node_responder = create_responder_node(ctx).await.unwrap();
 
-    spawn(async move {
-        create_initiator_node(ctx_clone).await.unwrap();
-    })
-    .await
-    .ok();
+    create_initiator_node(ctx_clone).await.unwrap();
 
     node_responder.stop().await.ok();
 
@@ -116,7 +109,7 @@ async fn create_initiator_node(ctx: Context) -> Result<()> {
 
 fn print_title(title: &str) {
     let padding = "=".repeat(title.len());
-    println!("{}", padding.red().on_yellow());
-    println!("{}", title.on_purple());
-    println!("{}", padding.red().on_yellow());
+    println!("{}", padding.black().on_bright_white());
+    println!("{}", title.black().on_bright_white());
+    println!("{}", padding.black().on_bright_white());
 }
