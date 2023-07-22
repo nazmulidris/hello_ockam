@@ -26,7 +26,7 @@ use ockam::{node, route, Context, Result};
 async fn main(ctx: Context) -> Result<()> {
     print_title("Run a node w/ 'app', 'echoer' and 'hopper1', 'hopper2', 'hopper3' workers → send a message over 3 hops -> stop the node");
 
-    println!("{}", HELP_TEXT.white().on_bright_black());
+    println!("{}", HELP_TEXT.green());
 
     // Create a node with default implementations
     let mut node = node(ctx);

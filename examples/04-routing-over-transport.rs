@@ -25,6 +25,8 @@ use ockam::{
 /// From: <https://docs.ockam.io/reference/libraries/rust/routing#transport>
 #[ockam::node]
 async fn main(ctx: Context) -> Result<()> {
+    println!("{}", HELP_TEXT.green());
+
     let ctx_clone = ctx.async_try_clone().await?;
 
     let mut node_responder = create_responder_node(ctx).await.unwrap();
@@ -43,7 +45,7 @@ async fn main(ctx: Context) -> Result<()> {
 /// It then runs forever waiting for messages.
 async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
     print_title(
-        "Create a node that runs tcp listener on 4000 and echoer worker → wait for messages until stopped",
+        "Create node_responder that runs tcp listener on 4000 and echoer worker → wait for messages until stopped",
     );
 
     // Create a node with default implementations
@@ -71,7 +73,7 @@ async fn create_responder_node(ctx: Context) -> Result<ockam::Node> {
 /// This node routes a message, to a worker on a different node, over the tcp transport.
 async fn create_initiator_node(ctx: Context) -> Result<()> {
     print_title(
-        "Create a node that routes a message, over the TCP transport, to a worker on a different node → stop",
+        "Create node_initiator that routes a message, over the TCP transport, to a worker on a different node → stop",
     );
 
     // Create a node with default implementations
@@ -93,13 +95,16 @@ async fn create_initiator_node(ctx: Context) -> Result<()> {
     let reply = node
         .send_and_receive::<String>(route, msg.to_string())
         .await?;
-    let output_msg = format!(
-        "App Sending: '{0}', over route: '{1}', and received: '{2}'",
-        msg.red(),
-        route_msg.green(),
-        reply.yellow() // Should print "👈 echo back:  Hello Ockam!"
-    );
-    println!("{}", output_msg.on_bright_black());
+
+    let lines = [
+        "node_initiator →".to_string(),
+        format!("    sending: {}", msg.green()),
+        format!("    over route: '{}'", route_msg.blue()),
+        format!("    and received: '{}'", reply.purple()), // Should print "👈 echo back:  Hello Ockam!"
+    ];
+    lines
+        .iter()
+        .for_each(|line| println!("{}", line.black().on_white()));
 
     // Stop all workers, stop the node, cleanup and return.
     node.stop().await?;
@@ -113,3 +118,23 @@ fn print_title(title: &str) {
     println!("{}", title.black().on_bright_white());
     println!("{}", padding.black().on_bright_white());
 }
+
+#[rustfmt::skip]
+const HELP_TEXT: &str =r#"
+┌──────────────────────┐
+│node_initiator        │
+├──────────────────────┤
+│ ┌──────────────────┐ │
+│ │Address:          │ │  ┌──────────────────────┐
+│ │'app'             │ │  │node_responder        │
+│ └──┬────────────▲──┘ │  ├──────────────────────┤
+│ ┌──▼────────────┴──┐ │  │ ┌──────────────────┐ │
+│ │TCP transport     └─┼──┼─►TCP transport     │ │
+│ │connect to 4000   ◄─┼──┼─┐listening on 4000 │ │
+│ └──────────────────┘ │  │ └──┬────────────▲──┘ │
+└──────────────────────┘  │ ┌──▼────────────┴──┐ │
+                          │ │Address:          │ │
+                          │ │'echoer'          │ │
+                          │ └──────────────────┘ │
+                          └──────────────────────┘
+"#;

@@ -29,7 +29,7 @@ async fn main(ctx: Context) -> Result<()> {
         "Run a node with default context 'app' & 'echoer' worker → send a message → stop the node",
     );
 
-    println!("{}", HELP_TEXT.white().on_bright_black());
+    println!("{}", HELP_TEXT.green());
 
     // Create a node with default implementations
     let mut node = node(ctx);

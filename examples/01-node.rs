@@ -25,7 +25,7 @@ use ockam::{node, Context, Result};
 async fn main(ctx: Context) -> Result<()> {
     print_title("Run a node & stop it right away");
 
-    println!("{}", HELP_TEXT.white().on_bright_black());
+    println!("{}", HELP_TEXT.green());
 
     // Create a node with default implementations
     let mut node = node(ctx);

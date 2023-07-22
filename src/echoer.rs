@@ -39,16 +39,20 @@ impl Worker for Echoer {
     type Message = String;
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: Routed<String>) -> Result<()> {
-        let output_msg = format!(
-            "📣 'echoer' worker → Address: {}, Received: {}",
-            format!("{}", ctx.address()).white(),
-            format!("{}", msg).white()
-        );
-        println!("{}", output_msg.on_bright_magenta());
-
         // Echo the message body back on its return_route.
-        let new_msg = format!("👈 echo back: {}", msg.as_body());
-        println!("\tsending msg back: {}", new_msg);
-        ctx.send(msg.return_route(), new_msg).await
+        let address_string = ctx.address().to_string();
+        let msg_string = msg.as_body().to_string();
+        let new_msg_string = format!("👈 echo back: {}", msg);
+
+        let lines = [
+            format!("📣 'echoer' worker → Address: {}", address_string.white()),
+            format!("    Received: '{}'", msg_string.white()),
+            format!("    Sent: '{}'", new_msg_string.white()),
+        ];
+        lines
+            .iter()
+            .for_each(|line| println!("{}", line.black().on_bright_magenta()));
+
+        ctx.send(msg.return_route(), new_msg_string).await
     }
 }

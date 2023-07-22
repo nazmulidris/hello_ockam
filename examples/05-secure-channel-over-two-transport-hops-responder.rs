@@ -22,7 +22,6 @@ use ockam::{
     route, TcpConnectionOptions,
 };
 use ockam::{node, AsyncTryClone, Context, Result, TcpListenerOptions, TcpTransportExtension};
-use tokio::spawn;
 
 /// From: <https://docs.ockam.io/reference/libraries/rust/secure-channels>
 #[ockam::node]
@@ -30,19 +29,11 @@ async fn main(ctx: Context) -> Result<()> {
     let ctx_clone = ctx.async_try_clone().await?;
     let ctx_clone_2 = ctx.async_try_clone().await?;
 
-    let mut node_responder = spawn(async move { create_responder_node(ctx).await.unwrap() })
-        .await
-        .unwrap();
+    let mut node_responder = create_responder_node(ctx).await.unwrap();
 
-    let mut node_middle = spawn(async move { create_middle_node(ctx_clone).await.unwrap() })
-        .await
-        .unwrap();
+    let mut node_middle = create_middle_node(ctx_clone).await.unwrap();
 
-    spawn(async move {
-        create_initiator_node(ctx_clone_2).await.unwrap();
-    })
-    .await
-    .ok();
+    create_initiator_node(ctx_clone_2).await.unwrap();
 
     node_responder.stop().await.ok();
     node_middle.stop().await.ok();
